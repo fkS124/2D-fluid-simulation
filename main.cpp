@@ -1,10 +1,7 @@
-#include "./lib/particle.h"
+#include "./lib/fluid.h"
 
-
-#define WIDTH 500
-#define HEIGHT 500
-void SDL_ExitWithError( string message );
-
+const int WIDTH = 500;
+const int HEIGHT = 500;
 
 int main(int argc, char* argv[]) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -33,29 +30,39 @@ int main(int argc, char* argv[]) {
     // App related variables
     bool running = true;
 
+    int delayCalculations = 50;
+    int lastCalculated = 0;
+
+    Fluid fluid(WIDTH, 5, 1, 0.5f);
+
     while ( running ) {
         SDL_Event event;
-        while ( SDL_PollEvent ) {
+        while ( SDL_PollEvent(&event) ) {
             switch( event.type ) {
                 case SDL_QUIT:
                     running = false;
+                    break;
+                default:
+                    break;
             }
         }
+        // fill bg with black
         SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255);
+        // clear renderer
         SDL_RenderClear( renderer );
+        
+        fluid.draw( renderer );
 
+        if ( SDL_GetTicks() - lastCalculated > delayCalculations ) {
+            lastCalculated = SDL_GetTicks();
+            fluid.calculate();
+        }
+
+        // show current frame
         SDL_RenderPresent( renderer );
     }
 
     SDL_DestroyWindow( window );
     SDL_DestroyRenderer( renderer );
     SDL_Quit( );
-}
-
-
-void SDL_ExitWithError( string message ) 
-{
-    std::cerr << "Error : " << message << " > " << SDL_GetError() << std::endl;
-    SDL_Quit();
-    exit(EXIT_FAILURE);
 }
