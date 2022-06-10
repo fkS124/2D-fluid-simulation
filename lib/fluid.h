@@ -13,5 +13,5 @@ class Fluid {
         ~Fluid();
         void draw( SDL_Renderer* renderer );
         void calculate();
-
+        void diffuse();
 };

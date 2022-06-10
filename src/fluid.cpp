@@ -7,7 +7,7 @@ Fluid::Fluid(int size, int diffusion, int viscosity, float dt) {
     for (double i = 0; i < size; i+=5) {
         cell_array row;
         for (double j = 0; j < size; j+=5) {
-            row.push_back(Cell(vec2{i, j}, vec2{0, 0}, 1));
+            row.push_back(Cell(Vec2(i, j), Vec2(0, 0), 1));
         }
         allCells.push_back(row);
     }

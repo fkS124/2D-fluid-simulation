@@ -8,16 +8,35 @@ void SDL_ExitWithError( string message )
 }
 
 
+Vec2::Vec2(double x, double y) {
+    this->x = x;
+    this->y = y;
+}
 
-Cell::Cell(vec2 pos, vec2 vel, double density) {
+Vec2 Vec2::operator+(const Vec2 other) {
+    return Vec2(this->x + other.x, this->y + other.y);
+}
+
+Vec2 Vec2::operator-(const Vec2 other) {
+    return Vec2(this->x - other.x, this->y - other.y);
+}
+
+
+void Vec2::operator+=(const Vec2 other) {
+    x += other.x;
+    y += other.y;
+}
+
+
+Cell::Cell(Vec2 pos, Vec2 vel, double density) {
     this->pos = pos;
     this->vel = vel;
     this->vel0 = vel;
     this->d = density;
     this->d0 = density;
 
-    rect.x = pos[0];
-    rect.y = pos[1];
+    rect.x = pos.x;
+    rect.y = pos.y;
     rect.w = 5;
     rect.h = 5;
 }
@@ -40,7 +59,6 @@ void Cell::addDensity( double amount ) {
     d += amount;
 }
 
-void Cell::addVelocity( vec2 amount ) {
-    vel[0] += amount[0];
-    vel[1] += amount[1];
+void Cell::addVelocity( Vec2 amount ) {
+    vel += amount;
 }
