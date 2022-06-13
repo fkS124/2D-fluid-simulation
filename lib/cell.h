@@ -38,8 +38,18 @@ class Cell {
         Cell(Vec2 pos, Vec2 vel, double density);
         ~Cell();
         void SetColor(SDL_Color color);
+        
         void addDensity(double amount);
+        void setDensity(double density);
+        double getDensity();
+        double getDensity0();
+
+        void setVx(double Vx);
+        void setVy(double Vy);
+        Vec2 getVelocity();
+        Vec2 getVelocity0();
         void addVelocity(Vec2 amount);
+
         void draw( SDL_Renderer* renderer );
 };
 

@@ -13,6 +13,8 @@ Vec2::Vec2(double x, double y) {
     this->y = y;
 }
 
+Vec2::~Vec2() {}
+
 Vec2 Vec2::operator+(const Vec2 other) {
     return Vec2(this->x + other.x, this->y + other.y);
 }
@@ -62,3 +64,12 @@ void Cell::addDensity( double amount ) {
 void Cell::addVelocity( Vec2 amount ) {
     vel += amount;
 }
+
+void Cell::setDensity(double density) {this->d = density;}
+double Cell::getDensity() {return d;}
+double Cell::getDensity0() {return d0;}
+
+void Cell::setVx(double Vx) {vel.x = Vx;}
+void Cell::setVy(double Vy) {vel.y = Vy;}
+Vec2 Cell::getVelocity() {return vel;}
+Vec2 Cell::getVelocity0() {return vel0;}
