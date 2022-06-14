@@ -1,7 +1,7 @@
 #include "./lib/fluid_square.h"
 
-const int WIDTH = 1000;
-const int HEIGHT = 1000;
+const int WIDTH = 1040;
+const int HEIGHT = 1040;
 
 int main(int argc, char* argv[]) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -32,6 +32,8 @@ int main(int argc, char* argv[]) {
     int holdingClick = 0;
 
     int mode = 0;
+    float maxVel = 0;
+    float minVel = 0;
 
     int delayCalculations = 50;
     int lastCalculated = 0;
@@ -45,6 +47,9 @@ int main(int argc, char* argv[]) {
     fluid = FluidSquareCreate(WIDTH / SCALE, 0.001f, 0.0f, 0.001f);
 
     int angle = 0;
+
+    SDL_Color maxVelColor = {255, 0, 0};
+    SDL_Color minVelColor = {0, 255, 0};
 
     while ( running ) {
         SDL_Event event;
@@ -94,6 +99,11 @@ int main(int argc, char* argv[]) {
         // clear renderer
         SDL_RenderClear( renderer );
 
+        if (mode == 1) {
+            float maxVel = getMaxVel(fluid->Vx, fluid->Vy);
+            float minVel = getMinVel(fluid->Vx, fluid->Vy);
+        }
+
         for (int i = 0; i < fluid->size; i++) {
             for (int j = 0; j < fluid->size; j++) {
                 int N = fluid->size;
@@ -104,8 +114,11 @@ int main(int argc, char* argv[]) {
                     
                     SDL_SetRenderDrawColor(renderer, color, color, color, 255);
                 }
-                else {
-                    // TODO : here set color according to velocity;
+                else if (mode == 1) {
+                
+                    SDL_Color result_color = getColorVel(fluid->Vx, fluid->Vy, maxVel, minVel, i, j, maxVelColor, minVelColor);
+
+                    SDL_SetRenderDrawColor(renderer, result_color.r, result_color.g, result_color.b, 255);
                 }
                 SDL_Rect rect;
                 rect.x = i * SCALE;
@@ -125,8 +138,8 @@ int main(int argc, char* argv[]) {
             float velX = cos(angle*PI/180)*vel;
             float velY = sin(angle*PI/180)*vel;
 
-            FluidSquareAddDensity(fluid, 100, 100, density);
-            FluidSquareAddVelocity(fluid, 100, 100, velX, velY);
+            FluidSquareAddDensity(fluid, WIDTH / SCALE / 2, WIDTH / SCALE / 2, density);
+            FluidSquareAddVelocity(fluid, WIDTH / SCALE / 2, WIDTH / SCALE / 2, velX, velY);
         } 
     
 
