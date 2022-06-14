@@ -1,7 +1,7 @@
 #include "./lib/fluid_square.h"
 
-const int WIDTH = 500;
-const int HEIGHT = 500;
+const int WIDTH = 1000;
+const int HEIGHT = 1000;
 
 int main(int argc, char* argv[]) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -30,6 +30,8 @@ int main(int argc, char* argv[]) {
     // App related variables
     int running = 1;
     int holdingClick = 0;
+
+    int mode = 0;
 
     int delayCalculations = 50;
     int lastCalculated = 0;
@@ -95,10 +97,16 @@ int main(int argc, char* argv[]) {
         for (int i = 0; i < fluid->size; i++) {
             for (int j = 0; j < fluid->size; j++) {
                 int N = fluid->size;
-                int color = fluid->density[IX(i, j)];
-                if (color > 255)
-                    color = 255;
-                SDL_SetRenderDrawColor(renderer, color, color, color, 255);
+                if (mode == 0) {
+                    int color = fluid->density[IX(i, j)];
+                    if (color > 255)
+                        color = 255;
+                    
+                    SDL_SetRenderDrawColor(renderer, color, color, color, 255);
+                }
+                else {
+                    // TODO : here set color according to velocity;
+                }
                 SDL_Rect rect;
                 rect.x = i * SCALE;
                 rect.y = j * SCALE;
@@ -110,15 +118,15 @@ int main(int argc, char* argv[]) {
 
         if ( SDL_GetTicks() - lastSprayed > 20) {
             lastSprayed = SDL_GetTicks();
-            angle = (angle + 10) % 360;
+            angle = (angle + rand() % 360) % 360;
 
             int vel = rand() % 25 + 60;
             int density = 40;
             float velX = cos(angle*PI/180)*vel;
             float velY = sin(angle*PI/180)*vel;
 
-            FluidSquareAddDensity(fluid, 50, 50, density);
-            FluidSquareAddVelocity(fluid, 50, 50, velX, velY);
+            FluidSquareAddDensity(fluid, 100, 100, density);
+            FluidSquareAddVelocity(fluid, 100, 100, velX, velY);
         } 
     
 
