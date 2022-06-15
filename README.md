@@ -26,11 +26,16 @@ At each step, it calculates the next density and velocity, using physics laws.
 
 There are three visualization modes : 
 
-1. **density** : the whiter the cell, the denser it is.
+1. **Density** : the whiter the cell, the denser it is.
+   
 <img src="assets/2bis.png" width=500>
-1. **velocity** : the reder the cell, the faster it is.
+
+2. **Velocity** : the reder the cell, the faster it is.
+   
 <img src="assets/3.png" width=500>
-1. **density** and **velocity** : the bluer the cell, the more the mean of density and velocity is high.
+
+3. **Density** and **Velocity** : the bluer the cell, the more the mean of density and velocity is high.
+   
 <img src="assets/1.png" width=500>
 
 
