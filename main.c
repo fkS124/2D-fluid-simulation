@@ -3,6 +3,12 @@
 const int WIDTH = 1040;
 const int HEIGHT = 1040;
 
+
+int min(int a, int b) {
+    return (a > b) ? b : a;
+}
+
+
 int main(int argc, char* argv[]) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         SDL_ExitWithError( "Couldn't init SDL2" );
@@ -12,7 +18,7 @@ int main(int argc, char* argv[]) {
     SDL_Renderer* renderer = NULL;
 
     // Initialize window and renderer
-    window = SDL_CreateWindow( "Fluid Simulation", 
+    window = SDL_CreateWindow( "Fluid Simulation (Visualization : density)", 
                                SDL_WINDOWPOS_UNDEFINED, 
                                SDL_WINDOWPOS_UNDEFINED, 
                                WIDTH, HEIGHT,
@@ -32,8 +38,8 @@ int main(int argc, char* argv[]) {
     int holdingClick = 0;
 
     int mode = 0;
-    float maxVel = 0;
-    float minVel = 0;
+    int velThreshold = 5;
+
 
     int delayCalculations = 50;
     int lastCalculated = 0;
@@ -48,9 +54,6 @@ int main(int argc, char* argv[]) {
 
     int angle = 0;
 
-    SDL_Color maxVelColor = {255, 0, 0};
-    SDL_Color minVelColor = {0, 255, 0};
-
     while ( running ) {
         SDL_Event event;
         while ( SDL_PollEvent(&event) ) {
@@ -58,6 +61,31 @@ int main(int argc, char* argv[]) {
                 case SDL_QUIT:
                     running = 0;
                     break;
+                case SDL_KEYDOWN:
+                    switch (event.key.keysym.sym)
+                    {
+                    case SDLK_s:
+                        mode = (mode + 1) % 3;
+                        switch (mode) {
+                            case 0:
+                                SDL_SetWindowTitle(window, "Fluid Simulation (Visualization : density)");
+                                break;
+                            case 1:
+                                SDL_SetWindowTitle(window, "Fluid Simulation (Visualization : velocity)");
+                                break;
+                            case 2:
+                                SDL_SetWindowTitle(window, "Fluid Simulation (Visualization : density and velocity)");
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    
+                    default:
+                        break;
+                    }
+                    break;
+                
                 case SDL_MOUSEBUTTONDOWN:
                     switch (event.button.button)
                     {
@@ -99,33 +127,37 @@ int main(int argc, char* argv[]) {
         // clear renderer
         SDL_RenderClear( renderer );
 
-        if (mode == 1) {
-            float maxVel = getMaxVel(fluid->Vx, fluid->Vy);
-            float minVel = getMinVel(fluid->Vx, fluid->Vy);
-        }
-
         for (int i = 0; i < fluid->size; i++) {
             for (int j = 0; j < fluid->size; j++) {
                 int N = fluid->size;
-                if (mode == 0) {
-                    int color = fluid->density[IX(i, j)];
-                    if (color > 255)
-                        color = 255;
-                    
-                    SDL_SetRenderDrawColor(renderer, color, color, color, 255);
-                }
-                else if (mode == 1) {
-                
-                    SDL_Color result_color = getColorVel(fluid->Vx, fluid->Vy, maxVel, minVel, i, j, maxVelColor, minVelColor);
-
-                    SDL_SetRenderDrawColor(renderer, result_color.r, result_color.g, result_color.b, 255);
-                }
                 SDL_Rect rect;
                 rect.x = i * SCALE;
                 rect.y = j * SCALE;
                 rect.w = SCALE;
                 rect.h = SCALE;
-                SDL_RenderFillRect(renderer, &rect);
+                if (mode < 2) {
+
+                    if (mode == 0) {
+                        int color = min(fluid->density[IX(i, j)], 255);
+                        SDL_SetRenderDrawColor(renderer, color, color, color, 255);
+                    }
+                    else if (mode == 1) {
+                        float vel = min(sqrt(pow(fluid->Vx[IX(i, j)], 2) + pow(fluid->Vy[IX(i, j)], 2)), velThreshold);
+                        SDL_SetRenderDrawColor(renderer, (vel / velThreshold) * 255, 0, 0, 255);
+                    }
+                    SDL_RenderFillRect(renderer, &rect);
+                }
+                else if (mode == 2) {
+                    int color = min(fluid->density[IX(i, j)], 255);
+                
+                    float vel = min(sqrt(pow(fluid->Vx[IX(i, j)], 2) + pow(fluid->Vy[IX(i, j)], 2)), velThreshold);
+                    if (color+vel != 0)
+                        SDL_SetRenderDrawColor(renderer, 0, min(50+(color+vel)/2, 255), min(100+(color+vel)/2, 255), 255);
+                    else 
+                        SDL_SetRenderDrawColor(renderer, 0, 40, 40, 0);
+                    SDL_RenderFillRect(renderer, &rect);
+                    
+                }
             }
         }
 

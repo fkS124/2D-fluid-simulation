@@ -1,2 +1,6 @@
-# 2D-fluid-simulation
-2D Fluid simulation using SDL and C++
+<div align="center">
+    <img src="">
+    <br/>
+    <br/>
+    <b>2D Fluid Simulation using SDL and C</b>
+</div>
