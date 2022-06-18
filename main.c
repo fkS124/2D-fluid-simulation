@@ -1,7 +1,7 @@
 #include "./lib/fluid_square.h"
 
-const int WIDTH = 1040;
-const int HEIGHT = 1040;
+const int WIDTH = 500;
+const int HEIGHT = 500;
 
 
 int min(int a, int b) {

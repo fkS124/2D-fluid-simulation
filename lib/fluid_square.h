@@ -17,7 +17,7 @@ struct FluidSquare {
 };
 typedef struct FluidSquare FluidSquare;
 
-FluidSquare *FluidSquareCreate(int size, int diffusion, int viscosity, float dt);
+FluidSquare *FluidSquareCreate(int size, float diffusion, float viscosity, float dt);
 void FluidSquareFree(FluidSquare *square);
 void FluidSquareAddDensity(FluidSquare *square, int x, int y, float amount);
 void FluidSquareAddVelocity(FluidSquare *square, int x, int y, float amtX, float amtY);

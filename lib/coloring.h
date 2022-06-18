@@ -6,4 +6,3 @@
 #define PI 3.14159265
 #define IX(x, y) ((x) + (y) * N)
 
-SDL_Color getColorVel(float *velX, float *velY, int i, int j);

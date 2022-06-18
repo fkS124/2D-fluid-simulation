@@ -9,7 +9,7 @@ void SDL_ExitWithError(const char * message)
 }
 
 
-FluidSquare *FluidSquareCreate(int size, int diffusion, int viscosity, float dt)
+FluidSquare *FluidSquareCreate(int size, float diffusion, float viscosity, float dt)
 {
     FluidSquare *square = malloc(sizeof(*square));
     int N = size;
