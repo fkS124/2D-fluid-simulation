@@ -66,3 +66,23 @@ and eventually, run the program using :
 ## Windows
 
 Compilation for windows is not available yet.
+
+## MacOS
+
+You first have to install the SDL2 library :
+
+```zsh
+brew install sdl2
+```
+And then just have to compile the program using make : 
+```zsh
+make
+```
+or if you somehow haven't `make` installed on your OS (it is included in the xcode dev tools though), run the compilation line :
+```
+gcc main.c -o ./bin/prog src/*.c -lSDL2 -lm
+```
+and eventually, run the program using :
+```
+./bin/prog
+```
